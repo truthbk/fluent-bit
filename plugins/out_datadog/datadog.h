@@ -34,6 +34,10 @@
 #define FLB_DATADOG_DD_MESSAGE_KEY    "message"
 #define FLB_DATADOG_DD_LOG_KEY        "log"
 
+#define FLB_DATADOG_API_HDR             "DD-API-KEY"
+#define FLB_DATADOG_ORIGIN_HDR          "DD-EVP-ORIGIN"
+#define FLB_DATADOG_ORIGIN_VERSION_HDR  "DD-EVP-ORIGIN-VERSION"
+
 #define FLB_DATADOG_CONTENT_TYPE   "Content-Type"
 #define FLB_DATADOG_MIME_JSON      "application/json"
 

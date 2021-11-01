@@ -22,7 +22,7 @@
 #define FLB_OUT_DATADOG_CONF_H
 
 #include <fluent-bit/flb_output.h>
-#include <fluent-bit/flb_config.h>  
+#include <fluent-bit/flb_config.h>
 
 #include "datadog.h"
 

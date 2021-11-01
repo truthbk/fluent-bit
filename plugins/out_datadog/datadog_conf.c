@@ -108,14 +108,12 @@ struct flb_out_datadog *flb_datadog_conf_create(struct flb_output_instance *ins,
         ctx->dd_message_key = flb_sds_create(tmp);
     }
 
-    ctx->uri = flb_sds_create("/v1/input/");
+    ctx->uri = flb_sds_create("/api/v2/logs");
     if (!ctx->uri) {
         flb_error("[out_datadog] error on uri generation");
         flb_datadog_conf_destroy(ctx);
         return NULL;
     }
-    /* Add the api_key to the URI */
-    ctx->uri = flb_sds_cat(ctx->uri, ctx->api_key, flb_sds_len(ctx->api_key));
     flb_debug("[out_datadog] ctx->uri: %s", ctx->uri);
 
     /* Get network configuration */
@@ -147,7 +145,7 @@ struct flb_out_datadog *flb_datadog_conf_create(struct flb_output_instance *ins,
     }
     ctx->nb_additional_entries++;
     flb_debug("[out_datadog] ctx->json_date_key: %s", ctx->json_date_key);
-   
+
     /* Prepare an upstream handler */
     upstream = flb_upstream_create(config, ctx->host, ctx->port, io_flags, &ins->tls);
     if (!upstream) {

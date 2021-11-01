@@ -24,6 +24,7 @@
 #include <fluent-bit/flb_http_client.h>
 #include <fluent-bit/flb_pack.h>
 #include <fluent-bit/flb_time.h>
+#include <fluent-bit/flb_version.h>
 
 #include <msgpack.h>
 
@@ -82,7 +83,7 @@ static int datadog_format(const void *data, size_t bytes,
                           struct flb_out_datadog *ctx)
 {
     /* for msgpack global structs */
-    size_t off = 0;   
+    size_t off = 0;
     int array_size = 0;
     msgpack_unpacked result;
     msgpack_sbuffer mp_sbuf;
@@ -236,12 +237,16 @@ static void cb_datadog_flush(const void *data, size_t bytes,
         FLB_OUTPUT_RETURN(FLB_ERROR);
     }
 
+    /* Add the required headers to the URI */
     flb_http_add_header(client, "User-Agent", 10, "Fluent-Bit", 10);
+    flb_http_add_header(client, FLB_DATADOG_API_HDR, sizeof(FLB_DATADOG_API_HDR) - 1, ctx->api_key, flb_sds_len(ctx->api_key));
+    flb_http_add_header(client, FLB_DATADOG_ORIGIN_HDR, sizeof(FLB_DATADOG_ORIGIN_HDR) - 1, "Fluent-Bit", 10);
+    flb_http_add_header(client, FLB_DATADOG_ORIGIN_VERSION_HDR, sizeof(FLB_DATADOG_ORIGIN_VERSION_HDR) - 1, FLB_VERSION_STR, sizeof(FLB_VERSION_STR) - 1);
     flb_http_add_header(client,
                         FLB_DATADOG_CONTENT_TYPE, sizeof(FLB_DATADOG_CONTENT_TYPE) - 1,
                         FLB_DATADOG_MIME_JSON, sizeof(FLB_DATADOG_MIME_JSON) - 1);
     /* TODO: Append other headers if needed*/
-    
+
     /* finaly send the query */
     ret = flb_http_do(client, &b_sent);
     if (ret == 0) {
@@ -282,7 +287,7 @@ static void cb_datadog_flush(const void *data, size_t bytes,
 static int cb_datadog_exit(void *data, struct flb_config *config)
 {
     struct flb_out_datadog *ctx = data;
- 
+
     flb_datadog_conf_destroy(ctx);
     return 0;
 }

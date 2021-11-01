@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(fluent-bit)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # Fluent Bit Version
 set(FLB_VERSION_MAJOR  1)
 set(FLB_VERSION_MINOR  3)
