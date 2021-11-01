@@ -20,6 +20,8 @@ endif()
 # Update CFLAGS
 if (MSVC)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W3")
+elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fno-common")
 else()
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 endif()
